@@ -5,18 +5,20 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 
+@Repository
 public interface MedicoRepository extends JpaRepository<Medico, Long> {
     Page<Medico> findAllByAtivoTrue(Pageable paginacao);
 
     @Query("""
-            SELECT m FROM Medicos m
+            SELECT m FROM Medico m
             WHERE m.ativo = 1
             AND m.especialidade = :especialidade
             AND m.id not in(
-            SELECT c.medico.id FROM Consulta
+            SELECT c.medico.id FROM Consulta c
             WHERE c.data = :data
             )
             ORDER BY RAND()
