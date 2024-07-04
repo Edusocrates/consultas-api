@@ -1,6 +1,7 @@
 package med.voll.api.domain.consulta;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,8 @@ import java.time.LocalDateTime;
 @Entity(name = "conslta")
 @Table(name = "consultas")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class Consulta {
 
