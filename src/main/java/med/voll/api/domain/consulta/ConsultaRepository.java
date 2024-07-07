@@ -21,4 +21,7 @@ public interface ConsultaRepository extends JpaRepository<Consulta, Long> {
     @Transactional
     @Query("UPDATE Consulta c SET c.motivoCancelamento = :motivo WHERE c.id = :idConsulta")
     void cancelarConsulta(@Param("idConsulta") Long idConsulta, @Param("motivo") MotivoCancelamento motivo);
+
+    
+    Boolean existsByMedicoIdAndData(Long aLong, LocalDateTime data);
 }
