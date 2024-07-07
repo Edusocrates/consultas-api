@@ -21,8 +21,8 @@ public class ConsultaController {
     @Transactional
     public ResponseEntity agender(@RequestBody @Valid DadosAgendamentoConsulta dados){
         System.out.println("Criando um novo agendamento de consulta! para o paciente: {}"+ dados.idPaciente());
-        agenda.agendar(dados);
-        return ResponseEntity.ok(new DadosDetalhamentoConsulta(null,null,null,null));
+        var dto = agenda.agendar(dados);
+        return ResponseEntity.ok(dto);
     }
 
     @DeleteMapping("/cancelar-consulta")
