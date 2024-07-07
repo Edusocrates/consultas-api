@@ -54,7 +54,12 @@ public class AgendaDeConsultas {
             throw new ValidacaoException("Necessário escolher uma especialidade!");
         }
 
-        return medicoRepository.escolherMedicoAleatorioLivreNaData(dados.especialidade(),dados.data());
+        var medico = medicoRepository.escolherMedicoAleatorioLivreNaData(dados.especialidade(),dados.data());
+        if(medico == null){
+            throw new ValidacaoException("Não possui medico disponivel nessa Data!");
+        }
+
+        return medico;
     }
 
     public void cancelar(DadosCancelamentoConsulta dados) {
