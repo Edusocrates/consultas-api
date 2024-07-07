@@ -1,0 +1,3 @@
+ALTER TABLE consultas
+ADD COLUMN ativa TINYINT(1) NOT NULL DEFAULT 1,
+ADD COLUMN motivo_cancelamento VARCHAR(255);

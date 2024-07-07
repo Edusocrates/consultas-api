@@ -2,7 +2,6 @@
 
     import jakarta.validation.constraints.Future;
     import jakarta.validation.constraints.NotNull;
-    import lombok.Data;
     import med.voll.api.domain.medico.Especialidade;
 
     import java.time.LocalDateTime;

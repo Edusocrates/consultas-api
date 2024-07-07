@@ -29,7 +29,7 @@ public class AgendaDeConsultas {
         }
         var medico = escolherMedico(dados);
         var paciente = pacienteRepository.findById(dados.idPaciente()).get();
-        var consulta = new Consulta(null,medico, paciente, dados.data());
+        var consulta = new Consulta(null, medico, paciente, dados.data(), null);
 
         consultaRepository.save(consulta);
     }
@@ -44,5 +44,23 @@ public class AgendaDeConsultas {
         }
 
         return medicoRepository.escolherMedicoAleatorioLivreNaData(dados.especialidade(),dados.data());
+    }
+
+    public void cancelar(DadosCancelamentoConsulta dados) {
+        var consulta = consultaRepository.getReferenceById(dados.idConsulta());
+        if( consulta == null){
+            throw new ValidacaoException("Não foi possivel encontrar a consulta!");
+        }
+        if(dados.motivo() == null){
+            throw new ValidacaoException("Necessário informar um motivo para cancelamento!");
+        }
+
+        var validaCancelamento = consultaRepository.validaCancelamentoConsulta(consulta.getId(),consulta.getData());
+        if(validaCancelamento.isPresent()){
+            throw new ValidacaoException("Não é possivel cancelar uma consulta com menos de 24h!");
+        }
+
+        consultaRepository.cancelarConsulta(dados.idConsulta(),dados.motivo());
+
     }
 }
