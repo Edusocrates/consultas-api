@@ -1,6 +1,7 @@
 package med.voll.api.domain.consulta;
 
-import med.voll.api.controller.consulta.validacoes.ValidadorAgendamentoConsultas;
+import med.voll.api.controller.consulta.validacoes.agendamento.ValidadorAgendamentoConsultas;
+import med.voll.api.controller.consulta.validacoes.cancelamento.ValidadorCancelamentoConsultas;
 import med.voll.api.domain.exceptions.ValidacaoException;
 import med.voll.api.domain.medico.Medico;
 import med.voll.api.domain.medico.MedicoRepository;
@@ -24,6 +25,9 @@ public class AgendaDeConsultas {
 
     @Autowired
     private List<ValidadorAgendamentoConsultas> validadores;
+
+    @Autowired
+    private List<ValidadorCancelamentoConsultas> validadoresCancelamento;
 
     public DadosDetalhamentoConsulta agendar(DadosAgendamentoConsulta dados){
         if(!pacienteRepository.existsById(dados.idPaciente())){
@@ -63,18 +67,7 @@ public class AgendaDeConsultas {
     }
 
     public void cancelar(DadosCancelamentoConsulta dados) {
-        var consulta = consultaRepository.getReferenceById(dados.idConsulta());
-        if( consulta == null){
-            throw new ValidacaoException("Não foi possivel encontrar a consulta!");
-        }
-        if(dados.motivo() == null){
-            throw new ValidacaoException("Necessário informar um motivo para cancelamento!");
-        }
-
-        var validaCancelamento = consultaRepository.validaCancelamentoConsulta(consulta.getId(),consulta.getData());
-        if(validaCancelamento.isPresent()){
-            throw new ValidacaoException("Não é possivel cancelar uma consulta com menos de 24h!");
-        }
+        validadoresCancelamento.forEach(v -> v.validar(dados));
 
         consultaRepository.cancelarConsulta(dados.idConsulta(),dados.motivo());
 
